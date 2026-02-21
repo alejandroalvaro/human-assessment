@@ -407,7 +407,7 @@ const INTERVIEW_LANG_ES = `
 
 === LANGUAGE AND BEHAVIOR INSTRUCTIONS ===
 
-IMPORTANT: Conduct the entire interview in Latin American Spanish. Use a casual, direct tone with "tu" (informal). Be respectful but don't sugarcoat. Think of how a smart, direct Latin American friend would talk.
+IMPORTANT: Conduct the entire interview in Argentinian Spanish (Rioplatense). Use a casual, direct tone with "vos" (voseo). Be respectful but don't sugarcoat. Think of how a smart, direct Argentine friend would talk.
 
 Ask ONE question at a time. Wait for the user's response before asking the next question. Keep your messages concise — don't lecture, just ask and briefly react to what they said before moving to the next question.
 
@@ -594,7 +594,7 @@ const ANALYSIS_OUTPUT_ES = `
 
 === OUTPUT INSTRUCTIONS ===
 
-Generate the complete report in Latin American Spanish. Use casual, direct tone with "tu". Be honest and insightful — tell hard truths with respect.
+Generate the complete report in Argentinian Spanish (Rioplatense). Use casual, direct tone with "vos" (voseo). Be honest and insightful — tell hard truths with respect.
 
 Use the following output format exactly:
 
@@ -707,7 +707,7 @@ Use the following output format exactly:
 
 ---
 
-*"Hazte multidimensionalmente fuerte — no forzando todos los dominios, sino resolviendo problemas que desbloquean integracion natural. Usa Glitches solo cuando hayas agotado tu potencial natural y puedas conscientemente aceptar las consecuencias."*`;
+*"Hacete multidimensionalmente fuerte — no forzando todos los dominios, sino resolviendo problemas que desbloquean integracion natural. Usa Glitches solo cuando hayas agotado tu potencial natural y puedas conscientemente aceptar las consecuencias."*`;
 
 export function getInterviewPrompt(lang: Language): string {
   return INTERVIEW_BASE + (lang === 'pt' ? INTERVIEW_LANG_PT : INTERVIEW_LANG_ES);
