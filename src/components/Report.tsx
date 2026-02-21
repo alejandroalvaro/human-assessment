@@ -87,8 +87,8 @@ export function Report({ content, lang, onRestart }: Props) {
   const html = useMemo(() => parseMarkdown(content), [content]);
 
   const t = {
-    header: lang === 'pt' ? 'HUMAN 3.0 — Relatorio' : 'HUMAN 3.0 — Reporte',
-    newAssessment: lang === 'pt' ? 'Nova Avaliacao' : 'Nueva Evaluacion',
+    header: lang === 'pt' ? 'HUMAN 3.0 — Relatório' : 'HUMAN 3.0 — Reporte',
+    newAssessment: lang === 'pt' ? 'Nova Avaliação' : 'Nueva Evaluación',
   };
 
   return (

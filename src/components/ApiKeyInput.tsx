@@ -1,22 +1,44 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 interface Props {
   onSubmit: (password: string) => void;
 }
 
+function detectLandingLang(): 'pt' | 'es' {
+  const lang = navigator.language || '';
+  return lang.startsWith('es') ? 'es' : 'pt';
+}
+
 export function ApiKeyInput({ onSubmit }: Props) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const landingLang = useMemo(detectLandingLang, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = password.trim();
     if (!trimmed) {
-      setError('Digite a senha de acesso');
+      setError(landingLang === 'pt' ? 'Digite a senha de acesso' : 'Ingresá tu contraseña');
       return;
     }
     onSubmit(trimmed);
   };
+
+  const t = landingLang === 'pt'
+    ? {
+        subtitle: 'Avaliação de Desenvolvimento Multidimensional',
+        label: 'Senha de acesso',
+        placeholder: 'Digite sua senha...',
+        button: 'Começar Avaliação',
+        footer: 'Acesso restrito. Solicite sua senha ao administrador.',
+      }
+    : {
+        subtitle: 'Evaluación de Desarrollo Multidimensional',
+        label: 'Contraseña de acceso',
+        placeholder: 'Ingresá tu contraseña...',
+        button: 'Comenzar Evaluación',
+        footer: 'Acceso restringido. Solicitá tu contraseña al administrador.',
+      };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-brand-bg p-4">
@@ -31,7 +53,7 @@ export function ApiKeyInput({ onSubmit }: Props) {
           </div>
           <h1 className="text-3xl font-bold text-brand-text mb-2">HUMAN 3.0</h1>
           <p className="text-brand-text-muted text-sm">
-            Avaliacao de Desenvolvimento Multidimensional
+            {t.subtitle}
           </p>
         </div>
 
@@ -44,7 +66,7 @@ export function ApiKeyInput({ onSubmit }: Props) {
               htmlFor="password"
               className="block text-sm text-brand-text-muted mb-1"
             >
-              Senha de acesso
+              {t.label}
             </label>
             <input
               id="password"
@@ -54,8 +76,8 @@ export function ApiKeyInput({ onSubmit }: Props) {
                 setPassword(e.target.value);
                 setError('');
               }}
-              placeholder="Digite sua senha..."
-              className="w-full px-3 py-2 bg-brand-bg border border-white/10 rounded-lg text-brand-text placeholder-brand-text-faint focus:outline-none focus:border-white/20"
+              placeholder={t.placeholder}
+              className="w-full px-3 py-2.5 bg-brand-bg border border-white/10 rounded-lg text-brand-text placeholder-brand-text-faint focus:outline-none focus:border-white/20"
               autoFocus
             />
             {error && (
@@ -66,14 +88,14 @@ export function ApiKeyInput({ onSubmit }: Props) {
           <button
             type="submit"
             disabled={!password.trim()}
-            className="w-full py-2 bg-accent-coral text-white rounded-lg font-medium hover:bg-accent-coral/90 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-2.5 bg-accent-coral text-white rounded-lg font-medium hover:bg-accent-coral/90 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
-            Comecar Avaliacao
+            {t.button}
           </button>
         </form>
 
         <p className="text-brand-text-faint text-xs text-center mt-4">
-          Acesso restrito. Solicite sua senha ao administrador.
+          {t.footer}
         </p>
       </div>
     </div>

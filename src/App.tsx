@@ -48,13 +48,13 @@ function InterviewScreen({ password }: { password: string }) {
           </div>
           <p className="text-brand-text-muted text-sm">
             {lang === 'pt'
-              ? 'Gerando seu relatorio HUMAN 3.0...'
+              ? 'Gerando seu relatório HUMAN 3.0...'
               : 'Generando tu reporte HUMAN 3.0...'}
           </p>
           <p className="text-brand-text-faint text-xs mt-2">
             {lang === 'pt'
-              ? 'Isso pode levar alguns minutos (analise profunda com Opus)'
-              : 'Esto puede tardar algunos minutos (analisis profundo con Opus)'}
+              ? 'Isso pode levar alguns minutos (análise profunda com Opus)'
+              : 'Esto puede tardar algunos minutos (análisis profundo con Opus)'}
           </p>
         </div>
       </div>

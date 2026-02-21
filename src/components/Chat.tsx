@@ -59,10 +59,10 @@ export function Chat({
   };
 
   const t = {
-    header: lang === 'pt' ? 'HUMAN 3.0 — Avaliacao' : 'HUMAN 3.0 — Evaluacion',
-    placeholder: lang === 'pt' ? 'Digite sua resposta...' : 'Escribe tu respuesta...',
+    header: lang === 'pt' ? 'HUMAN 3.0 — Avaliação' : 'HUMAN 3.0 — Evaluación',
+    placeholder: lang === 'pt' ? 'Digite sua resposta...' : 'Escribí tu respuesta...',
     send: lang === 'pt' ? 'Enviar' : 'Enviar',
-    generateReport: lang === 'pt' ? 'Gerar Relatorio HUMAN 3.0' : 'Generar Reporte HUMAN 3.0',
+    generateReport: lang === 'pt' ? 'Gerar Relatório HUMAN 3.0' : 'Generar Reporte HUMAN 3.0',
   };
 
   return (
@@ -88,7 +88,7 @@ export function Chat({
             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[80%] px-4 py-2.5 rounded-2xl whitespace-pre-wrap text-sm leading-relaxed ${
+              className={`max-w-[80%] px-4 py-2.5 rounded-2xl whitespace-pre-wrap text-base leading-relaxed ${
                 msg.role === 'user'
                   ? 'bg-brand-surface-alt text-brand-text'
                   : 'bg-brand-surface text-brand-text-muted border-l-2 border-accent-coral'
@@ -137,7 +137,7 @@ export function Chat({
               placeholder={t.placeholder}
               disabled={isLoading}
               rows={1}
-              className="flex-1 px-3 py-2 bg-brand-bg border border-white/10 rounded-lg text-brand-text placeholder-brand-text-faint focus:outline-none focus:border-white/20 resize-none disabled:opacity-50 text-sm"
+              className="flex-1 px-3 py-2.5 bg-brand-bg border border-white/10 rounded-lg text-brand-text placeholder-brand-text-faint focus:outline-none focus:border-white/20 resize-none disabled:opacity-50 text-base"
             />
             <button
               onClick={handleSubmit}
