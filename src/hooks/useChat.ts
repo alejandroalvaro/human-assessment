@@ -4,7 +4,7 @@ import { sendInterviewMessage, generateReport } from '../services/anthropic';
 
 const COMPLETE_MARKER = '[ASSESSMENT_COMPLETE]';
 
-export function useChat(apiKey: string) {
+export function useChat(password: string) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [phase, setPhase] = useState<Phase>('interview');
@@ -23,7 +23,7 @@ export function useChat(apiKey: string) {
       setError(null);
 
       try {
-        const response = await sendInterviewMessage(apiKey, updatedMessages);
+        const response = await sendInterviewMessage(password, updatedMessages);
 
         let displayContent = response;
         let isComplete = false;
@@ -49,7 +49,7 @@ export function useChat(apiKey: string) {
         setIsLoading(false);
       }
     },
-    [apiKey, messages, isLoading]
+    [password, messages, isLoading]
   );
 
   const startInterview = useCallback(async () => {
@@ -59,7 +59,7 @@ export function useChat(apiKey: string) {
     const kickoff: Message = { role: 'user', content: 'Ola, quero fazer minha avaliacao HUMAN 3.0.' };
 
     try {
-      const response = await sendInterviewMessage(apiKey, [kickoff]);
+      const response = await sendInterviewMessage(password, [kickoff]);
       const assistantMessage: Message = {
         role: 'assistant',
         content: response,
@@ -70,21 +70,21 @@ export function useChat(apiKey: string) {
     } finally {
       setIsLoading(false);
     }
-  }, [apiKey]);
+  }, [password]);
 
   const requestReport = useCallback(async () => {
     setPhase('generating');
     setError(null);
 
     try {
-      const reportText = await generateReport(apiKey, messages);
+      const reportText = await generateReport(password, messages);
       setReport(reportText);
       setPhase('report');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate report');
       setPhase('interview');
     }
-  }, [apiKey, messages]);
+  }, [password, messages]);
 
   return {
     messages,

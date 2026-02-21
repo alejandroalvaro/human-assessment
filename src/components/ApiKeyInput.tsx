@@ -1,18 +1,18 @@
 import { useState } from 'react';
 
 interface Props {
-  onSubmit: (apiKey: string) => void;
+  onSubmit: (password: string) => void;
 }
 
 export function ApiKeyInput({ onSubmit }: Props) {
-  const [key, setKey] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmed = key.trim();
-    if (!trimmed.startsWith('sk-ant-')) {
-      setError('A chave deve comecar com "sk-ant-"');
+    const trimmed = password.trim();
+    if (!trimmed) {
+      setError('Digite a senha de acesso');
       return;
     }
     onSubmit(trimmed);
@@ -41,20 +41,20 @@ export function ApiKeyInput({ onSubmit }: Props) {
         >
           <div>
             <label
-              htmlFor="api-key"
+              htmlFor="password"
               className="block text-sm text-brand-text-muted mb-1"
             >
-              Anthropic API Key
+              Senha de acesso
             </label>
             <input
-              id="api-key"
+              id="password"
               type="password"
-              value={key}
+              value={password}
               onChange={(e) => {
-                setKey(e.target.value);
+                setPassword(e.target.value);
                 setError('');
               }}
-              placeholder="sk-ant-..."
+              placeholder="Digite sua senha..."
               className="w-full px-3 py-2 bg-brand-bg border border-white/10 rounded-lg text-brand-text placeholder-brand-text-faint focus:outline-none focus:border-white/20"
               autoFocus
             />
@@ -65,7 +65,7 @@ export function ApiKeyInput({ onSubmit }: Props) {
 
           <button
             type="submit"
-            disabled={!key.trim()}
+            disabled={!password.trim()}
             className="w-full py-2 bg-accent-coral text-white rounded-lg font-medium hover:bg-accent-coral/90 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             Comecar Avaliacao
@@ -73,7 +73,7 @@ export function ApiKeyInput({ onSubmit }: Props) {
         </form>
 
         <p className="text-brand-text-faint text-xs text-center mt-4">
-          Sua chave nao e salva em nenhum lugar. Usada apenas durante esta sessao.
+          Acesso restrito. Solicite sua senha ao administrador.
         </p>
       </div>
     </div>

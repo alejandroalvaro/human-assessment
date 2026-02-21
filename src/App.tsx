@@ -4,7 +4,7 @@ import { Chat } from './components/Chat';
 import { Report } from './components/Report';
 import { useChat } from './hooks/useChat';
 
-function InterviewScreen({ apiKey }: { apiKey: string }) {
+function InterviewScreen({ password }: { password: string }) {
   const {
     messages,
     isLoading,
@@ -15,7 +15,7 @@ function InterviewScreen({ apiKey }: { apiKey: string }) {
     sendMessage,
     startInterview,
     requestReport,
-  } = useChat(apiKey);
+  } = useChat(password);
 
   useEffect(() => {
     startInterview();
@@ -68,13 +68,13 @@ function InterviewScreen({ apiKey }: { apiKey: string }) {
 }
 
 function App() {
-  const [apiKey, setApiKey] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
 
-  if (!apiKey) {
-    return <ApiKeyInput onSubmit={setApiKey} />;
+  if (!password) {
+    return <ApiKeyInput onSubmit={setPassword} />;
   }
 
-  return <InterviewScreen apiKey={apiKey} />;
+  return <InterviewScreen password={password} />;
 }
 
 export default App;

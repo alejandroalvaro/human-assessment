@@ -1,9 +1,7 @@
 import type { Message } from '../types';
 import { INTERVIEW_SYSTEM_PROMPT, ANALYSIS_SYSTEM_PROMPT } from '../config/prompts';
 
-const API_URL = import.meta.env.DEV
-  ? '/api/v1/messages'
-  : 'https://api.anthropic.com/v1/messages';
+const API_URL = '/api/messages';
 
 interface AnthropicMessage {
   role: 'user' | 'assistant';
@@ -16,7 +14,7 @@ interface AnthropicResponse {
 }
 
 async function callAnthropic(
-  apiKey: string,
+  password: string,
   model: string,
   system: string,
   messages: AnthropicMessage[],
@@ -26,9 +24,7 @@ async function callAnthropic(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
+      'x-access-password': password,
     },
     body: JSON.stringify({
       model,
@@ -67,11 +63,11 @@ async function callAnthropic(
 }
 
 export async function sendInterviewMessage(
-  apiKey: string,
+  password: string,
   messages: Message[]
 ): Promise<string> {
   return callAnthropic(
-    apiKey,
+    password,
     'claude-sonnet-4-20250514',
     INTERVIEW_SYSTEM_PROMPT,
     messages.map((m) => ({ role: m.role, content: m.content })),
@@ -80,7 +76,7 @@ export async function sendInterviewMessage(
 }
 
 export async function generateReport(
-  apiKey: string,
+  password: string,
   messages: Message[]
 ): Promise<string> {
   const transcript = messages
@@ -91,7 +87,7 @@ export async function generateReport(
     .join('\n\n');
 
   return callAnthropic(
-    apiKey,
+    password,
     'claude-opus-4-6',
     ANALYSIS_SYSTEM_PROMPT,
     [
