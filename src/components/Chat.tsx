@@ -9,6 +9,7 @@ interface Props {
   assessmentComplete: boolean;
   error: string | null;
   lang: Language;
+  onToggleLang: () => void;
   onSendMessage: (text: string) => void;
   onRequestReport: () => void;
 }
@@ -19,6 +20,7 @@ export function Chat({
   assessmentComplete,
   error,
   lang,
+  onToggleLang,
   onSendMessage,
   onRequestReport,
 }: Props) {
@@ -68,16 +70,24 @@ export function Chat({
   return (
     <div className="flex flex-col h-screen bg-brand-bg">
       {/* Header */}
-      <div className="flex-shrink-0 bg-brand-surface border-b border-white/5 px-4 py-3 flex items-center gap-3">
-        <div className="flex gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-quadrant-mind" />
-          <span className="w-2 h-2 rounded-full bg-quadrant-body" />
-          <span className="w-2 h-2 rounded-full bg-quadrant-spirit" />
-          <span className="w-2 h-2 rounded-full bg-quadrant-vocation" />
+      <div className="flex-shrink-0 bg-brand-surface border-b border-white/5 px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-quadrant-mind" />
+            <span className="w-2 h-2 rounded-full bg-quadrant-body" />
+            <span className="w-2 h-2 rounded-full bg-quadrant-spirit" />
+            <span className="w-2 h-2 rounded-full bg-quadrant-vocation" />
+          </div>
+          <h1 className="text-sm font-medium text-brand-text-muted">
+            {t.header}
+          </h1>
         </div>
-        <h1 className="text-sm font-medium text-brand-text-muted">
-          {t.header}
-        </h1>
+        <button
+          onClick={onToggleLang}
+          className="px-2.5 py-1 text-xs font-medium text-brand-text-muted bg-brand-surface-alt rounded hover:bg-brand-surface-alt/80 transition-colors"
+        >
+          {lang === 'pt' ? 'ES' : 'PT'}
+        </button>
       </div>
 
       {/* Messages */}

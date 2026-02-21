@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { Message, Phase } from '../types';
 import type { Language } from '../utils/language';
-import { getLanguage } from '../utils/language';
+import { getDefaultLanguage } from '../utils/language';
 import { sendInterviewMessage, generateReport } from '../services/anthropic';
 
 const COMPLETE_MARKER = '[ASSESSMENT_COMPLETE]';
@@ -14,7 +14,7 @@ export function useChat(password: string) {
   const [error, setError] = useState<string | null>(null);
   const [assessmentComplete, setAssessmentComplete] = useState(false);
 
-  const lang: Language = getLanguage(password);
+  const [lang, setLang] = useState<Language>(() => getDefaultLanguage(password));
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -106,5 +106,6 @@ export function useChat(password: string) {
     startInterview,
     requestReport,
     lang,
+    setLang,
   };
 }

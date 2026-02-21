@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ApiKeyInput } from './components/ApiKeyInput';
 import { Chat } from './components/Chat';
 import { Report } from './components/Report';
@@ -16,7 +16,12 @@ function InterviewScreen({ password }: { password: string }) {
     startInterview,
     requestReport,
     lang,
+    setLang,
   } = useChat(password);
+
+  const toggleLang = useCallback(() => {
+    setLang(l => l === 'pt' ? 'es' : 'pt');
+  }, [setLang]);
 
   useEffect(() => {
     startInterview();
@@ -27,6 +32,7 @@ function InterviewScreen({ password }: { password: string }) {
       <Report
         content={report}
         lang={lang}
+        onToggleLang={toggleLang}
         onRestart={() => window.location.reload()}
       />
     );
@@ -68,6 +74,7 @@ function InterviewScreen({ password }: { password: string }) {
       assessmentComplete={assessmentComplete}
       error={error}
       lang={lang}
+      onToggleLang={toggleLang}
       onSendMessage={sendMessage}
       onRequestReport={requestReport}
     />

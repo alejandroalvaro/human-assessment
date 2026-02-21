@@ -1,9 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, useCallback, useState } from 'react';
+import html2pdf from 'html2pdf.js';
 import type { Language } from '../utils/language';
 
 interface Props {
   content: string;
   lang: Language;
+  onToggleLang: () => void;
   onRestart: () => void;
 }
 
@@ -83,13 +85,38 @@ function parseMarkdown(text: string): string {
     .replace(/((?:<li[^>]*>.*<\/li>\n?)+)/g, '<ul class="list-disc pl-4 my-2">$1</ul>');
 }
 
-export function Report({ content, lang, onRestart }: Props) {
+export function Report({ content, lang, onToggleLang, onRestart }: Props) {
   const html = useMemo(() => parseMarkdown(content), [content]);
+  const reportRef = useRef<HTMLDivElement>(null);
+  const [exporting, setExporting] = useState(false);
 
   const t = {
     header: lang === 'pt' ? 'HUMAN 3.0 — Relatório' : 'HUMAN 3.0 — Reporte',
     newAssessment: lang === 'pt' ? 'Nova Avaliação' : 'Nueva Evaluación',
+    downloadPDF: lang === 'pt' ? 'Baixar PDF' : 'Descargar PDF',
+    exporting: lang === 'pt' ? 'Gerando…' : 'Generando…',
   };
+
+  const handleExportPDF = useCallback(async () => {
+    if (!reportRef.current || exporting) return;
+    setExporting(true);
+    try {
+      const filename = lang === 'pt' ? 'HUMAN-3.0-Relatório.pdf' : 'HUMAN-3.0-Reporte.pdf';
+      await html2pdf()
+        .set({
+          margin: 10,
+          filename,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['avoid-all', 'css', 'legacy'], avoid: ['h1', 'h2', 'h3', 'li'] },
+        })
+        .from(reportRef.current)
+        .save();
+    } finally {
+      setExporting(false);
+    }
+  }, [lang, exporting]);
 
   return (
     <div className="min-h-screen bg-brand-bg">
@@ -104,16 +131,32 @@ export function Report({ content, lang, onRestart }: Props) {
           </div>
           <span className="text-sm font-medium text-brand-text-muted">{t.header}</span>
         </div>
-        <button
-          onClick={onRestart}
-          className="px-4 py-1.5 bg-brand-surface-alt text-brand-text-muted rounded-lg hover:bg-brand-surface-alt/80 transition-colors text-sm"
-        >
-          {t.newAssessment}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onToggleLang}
+            className="px-2.5 py-1.5 text-xs font-medium text-brand-text-muted bg-brand-surface-alt rounded-lg hover:bg-brand-surface-alt/80 transition-colors"
+          >
+            {lang === 'pt' ? 'ES' : 'PT'}
+          </button>
+          <button
+            onClick={handleExportPDF}
+            disabled={exporting}
+            className="px-4 py-1.5 bg-accent-coral text-white rounded-lg hover:bg-accent-coral/80 transition-colors text-sm disabled:opacity-50"
+          >
+            {exporting ? t.exporting : t.downloadPDF}
+          </button>
+          <button
+            onClick={onRestart}
+            className="px-4 py-1.5 bg-brand-surface-alt text-brand-text-muted rounded-lg hover:bg-brand-surface-alt/80 transition-colors text-sm"
+          >
+            {t.newAssessment}
+          </button>
+        </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-8">
         <div
+          ref={reportRef}
           className="prose prose-invert max-w-none"
           dangerouslySetInnerHTML={{ __html: html }}
         />
