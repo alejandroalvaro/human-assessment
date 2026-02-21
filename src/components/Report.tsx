@@ -10,11 +10,11 @@ interface Props {
 }
 
 const QUADRANT_STYLES: Record<string, { h2: string; h3dot: string; border: string }> = {
-  mind:     { h2: 'text-xl font-bold text-quadrant-mind mt-6 mb-3', h3dot: 'bg-quadrant-mind', border: 'border-l-2 border-quadrant-mind pl-4' },
-  body:     { h2: 'text-xl font-bold text-quadrant-body mt-6 mb-3', h3dot: 'bg-quadrant-body', border: 'border-l-2 border-quadrant-body pl-4' },
-  spirit:   { h2: 'text-xl font-bold text-quadrant-spirit mt-6 mb-3', h3dot: 'bg-quadrant-spirit', border: 'border-l-2 border-quadrant-spirit pl-4' },
-  vocation: { h2: 'text-xl font-bold text-quadrant-vocation mt-6 mb-3', h3dot: 'bg-quadrant-vocation', border: 'border-l-2 border-quadrant-vocation pl-4' },
-  default:  { h2: 'text-xl font-bold text-brand-text mt-6 mb-3', h3dot: 'bg-accent-coral', border: '' },
+  mind:     { h2: 'text-2xl font-bold text-quadrant-mind mt-6 mb-3', h3dot: 'bg-quadrant-mind', border: 'border-l-2 border-quadrant-mind pl-4' },
+  body:     { h2: 'text-2xl font-bold text-quadrant-body mt-6 mb-3', h3dot: 'bg-quadrant-body', border: 'border-l-2 border-quadrant-body pl-4' },
+  spirit:   { h2: 'text-2xl font-bold text-quadrant-spirit mt-6 mb-3', h3dot: 'bg-quadrant-spirit', border: 'border-l-2 border-quadrant-spirit pl-4' },
+  vocation: { h2: 'text-2xl font-bold text-quadrant-vocation mt-6 mb-3', h3dot: 'bg-quadrant-vocation', border: 'border-l-2 border-quadrant-vocation pl-4' },
+  default:  { h2: 'text-2xl font-bold text-brand-text mt-6 mb-3', h3dot: 'bg-accent-coral', border: '' },
 };
 
 function detectQuadrant(text: string): string {
@@ -40,7 +40,7 @@ function parseMarkdown(text: string): string {
       // H1
       const h1Match = line.match(/^# (.+)$/);
       if (h1Match) {
-        return `<h1 class="text-2xl font-bold text-brand-text mt-8 mb-4">${h1Match[1]}</h1>`;
+        return `<h1 class="text-3xl font-bold text-brand-text mt-8 mb-4">${h1Match[1]}</h1>`;
       }
 
       // H2 — detect quadrant
@@ -56,7 +56,7 @@ function parseMarkdown(text: string): string {
       const h3Match = line.match(/^### (.+)$/);
       if (h3Match) {
         const style = QUADRANT_STYLES[currentQuadrant] || QUADRANT_STYLES.default;
-        return `<h3 class="text-lg font-semibold text-brand-text mt-5 mb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full ${style.h3dot} inline-block shrink-0"></span>${h3Match[1]}</h3>`;
+        return `<h3 class="text-xl font-semibold text-brand-text mt-5 mb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full ${style.h3dot} inline-block shrink-0"></span>${h3Match[1]}</h3>`;
       }
 
       // Bold
@@ -67,7 +67,7 @@ function parseMarkdown(text: string): string {
       // Bullet points
       const bulletMatch = processed.match(/^- (.+)$/);
       if (bulletMatch) {
-        return `<li class="ml-4 text-brand-text-muted mb-1">${bulletMatch[1]}</li>`;
+        return `<li class="ml-4 text-brand-text-muted mb-1 text-lg leading-relaxed">${bulletMatch[1]}</li>`;
       }
 
       // Empty lines
@@ -75,7 +75,7 @@ function parseMarkdown(text: string): string {
 
       // Paragraphs
       if (!/^<[huplo]|^<hr|^<li|^<ul|^<str|^<em/.test(processed)) {
-        return `<p class="text-brand-text-muted mb-2">${processed}</p>`;
+        return `<p class="text-brand-text-muted mb-2 text-lg leading-relaxed">${processed}</p>`;
       }
 
       return processed;

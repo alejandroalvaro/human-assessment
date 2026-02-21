@@ -98,7 +98,7 @@ export function Chat({
             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[80%] px-4 py-2.5 rounded-2xl whitespace-pre-wrap text-base leading-relaxed ${
+              className={`max-w-[80%] px-4 py-2.5 rounded-2xl whitespace-pre-wrap text-lg leading-relaxed ${
                 msg.role === 'user'
                   ? 'bg-brand-surface-alt text-brand-text'
                   : 'bg-brand-surface text-brand-text-muted border-l-2 border-accent-coral'
@@ -147,7 +147,7 @@ export function Chat({
               placeholder={t.placeholder}
               disabled={isLoading}
               rows={1}
-              className="flex-1 px-3 py-2.5 bg-brand-bg border border-white/10 rounded-lg text-brand-text placeholder-brand-text-faint focus:outline-none focus:border-white/20 resize-none disabled:opacity-50 text-base"
+              className="flex-1 px-3 py-2.5 bg-brand-bg border border-white/10 rounded-lg text-brand-text placeholder-brand-text-faint focus:outline-none focus:border-white/20 resize-none disabled:opacity-50 text-lg"
             />
             <button
               onClick={handleSubmit}
