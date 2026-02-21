@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { Message, Phase } from '../types';
+import type { Language } from '../utils/language';
+import { getLanguage } from '../utils/language';
 import { sendInterviewMessage, generateReport } from '../services/anthropic';
 
 const COMPLETE_MARKER = '[ASSESSMENT_COMPLETE]';
@@ -12,6 +14,8 @@ export function useChat(password: string) {
   const [error, setError] = useState<string | null>(null);
   const [assessmentComplete, setAssessmentComplete] = useState(false);
 
+  const lang: Language = getLanguage(password);
+
   const sendMessage = useCallback(
     async (text: string) => {
       if (isLoading || !text.trim()) return;
@@ -23,7 +27,7 @@ export function useChat(password: string) {
       setError(null);
 
       try {
-        const response = await sendInterviewMessage(password, updatedMessages);
+        const response = await sendInterviewMessage(password, lang, updatedMessages);
 
         let displayContent = response;
         let isComplete = false;
@@ -49,17 +53,22 @@ export function useChat(password: string) {
         setIsLoading(false);
       }
     },
-    [password, messages, isLoading]
+    [password, lang, messages, isLoading]
   );
 
   const startInterview = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
-    const kickoff: Message = { role: 'user', content: 'Ola, quero fazer minha avaliacao HUMAN 3.0.' };
+    const kickoff: Message = {
+      role: 'user',
+      content: lang === 'pt'
+        ? 'Ola, quero fazer minha avaliacao HUMAN 3.0.'
+        : 'Hola, quiero hacer mi evaluacion HUMAN 3.0.',
+    };
 
     try {
-      const response = await sendInterviewMessage(password, [kickoff]);
+      const response = await sendInterviewMessage(password, lang, [kickoff]);
       const assistantMessage: Message = {
         role: 'assistant',
         content: response,
@@ -70,21 +79,21 @@ export function useChat(password: string) {
     } finally {
       setIsLoading(false);
     }
-  }, [password]);
+  }, [password, lang]);
 
   const requestReport = useCallback(async () => {
     setPhase('generating');
     setError(null);
 
     try {
-      const reportText = await generateReport(password, messages);
+      const reportText = await generateReport(password, lang, messages);
       setReport(reportText);
       setPhase('report');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate report');
       setPhase('interview');
     }
-  }, [password, messages]);
+  }, [password, lang, messages]);
 
   return {
     messages,
@@ -96,5 +105,6 @@ export function useChat(password: string) {
     sendMessage,
     startInterview,
     requestReport,
+    lang,
   };
 }

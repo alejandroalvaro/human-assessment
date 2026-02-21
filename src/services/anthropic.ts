@@ -1,5 +1,6 @@
 import type { Message } from '../types';
-import { INTERVIEW_SYSTEM_PROMPT, ANALYSIS_SYSTEM_PROMPT } from '../config/prompts';
+import type { Language } from '../utils/language';
+import { getInterviewPrompt, getAnalysisPrompt } from '../config/prompts';
 
 const API_URL = '/api/messages';
 
@@ -64,12 +65,13 @@ async function callAnthropic(
 
 export async function sendInterviewMessage(
   password: string,
+  lang: Language,
   messages: Message[]
 ): Promise<string> {
   return callAnthropic(
     password,
     'claude-sonnet-4-20250514',
-    INTERVIEW_SYSTEM_PROMPT,
+    getInterviewPrompt(lang),
     messages.map((m) => ({ role: m.role, content: m.content })),
     1024
   );
@@ -77,11 +79,12 @@ export async function sendInterviewMessage(
 
 export async function generateReport(
   password: string,
+  lang: Language,
   messages: Message[]
 ): Promise<string> {
   const transcript = messages
     .map((m) => {
-      const label = m.role === 'assistant' ? 'Avaliador' : 'Usuario';
+      const label = m.role === 'assistant' ? (lang === 'pt' ? 'Avaliador' : 'Evaluador') : (lang === 'pt' ? 'Usuario' : 'Usuario');
       return `${label}: ${m.content}`;
     })
     .join('\n\n');
@@ -89,11 +92,13 @@ export async function generateReport(
   return callAnthropic(
     password,
     'claude-opus-4-6',
-    ANALYSIS_SYSTEM_PROMPT,
+    getAnalysisPrompt(lang),
     [
       {
         role: 'user',
-        content: `Here is the complete interview transcript to analyze:\n\n---\n\n${transcript}\n\n---\n\nPlease generate the complete HUMAN 3.0 Development Assessment Report based on this interview.`,
+        content: lang === 'pt'
+          ? `Here is the complete interview transcript to analyze:\n\n---\n\n${transcript}\n\n---\n\nPlease generate the complete HUMAN 3.0 Development Assessment Report based on this interview.`
+          : `Here is the complete interview transcript to analyze:\n\n---\n\n${transcript}\n\n---\n\nPlease generate the complete HUMAN 3.0 Development Assessment Report based on this interview.`,
       },
     ],
     16000

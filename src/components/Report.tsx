@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
+import type { Language } from '../utils/language';
 
 interface Props {
   content: string;
+  lang: Language;
   onRestart: () => void;
 }
 
@@ -16,9 +18,9 @@ const QUADRANT_STYLES: Record<string, { h2: string; h3dot: string; border: strin
 function detectQuadrant(text: string): string {
   const lower = text.toLowerCase();
   if (lower.includes('mente') || lower.includes('mind') || lower.includes('mental')) return 'mind';
-  if (lower.includes('corpo') || lower.includes('body') || lower.includes('fisic') || lower.includes('físic')) return 'body';
-  if (lower.includes('espírito') || lower.includes('espirito') || lower.includes('spirit') || lower.includes('espiritual')) return 'spirit';
-  if (lower.includes('vocação') || lower.includes('vocacao') || lower.includes('vocation') || lower.includes('proposito') || lower.includes('propósito')) return 'vocation';
+  if (lower.includes('corpo') || lower.includes('cuerpo') || lower.includes('body') || lower.includes('fisic') || lower.includes('físic')) return 'body';
+  if (lower.includes('espírito') || lower.includes('espirito') || lower.includes('espiritu') || lower.includes('spirit') || lower.includes('espiritual')) return 'spirit';
+  if (lower.includes('vocação') || lower.includes('vocacao') || lower.includes('vocacion') || lower.includes('vocation') || lower.includes('proposito') || lower.includes('propósito')) return 'vocation';
   return 'default';
 }
 
@@ -81,8 +83,13 @@ function parseMarkdown(text: string): string {
     .replace(/((?:<li[^>]*>.*<\/li>\n?)+)/g, '<ul class="list-disc pl-4 my-2">$1</ul>');
 }
 
-export function Report({ content, onRestart }: Props) {
+export function Report({ content, lang, onRestart }: Props) {
   const html = useMemo(() => parseMarkdown(content), [content]);
+
+  const t = {
+    header: lang === 'pt' ? 'HUMAN 3.0 — Relatorio' : 'HUMAN 3.0 — Reporte',
+    newAssessment: lang === 'pt' ? 'Nova Avaliacao' : 'Nueva Evaluacion',
+  };
 
   return (
     <div className="min-h-screen bg-brand-bg">
@@ -95,13 +102,13 @@ export function Report({ content, onRestart }: Props) {
             <span className="w-2 h-2 rounded-full bg-quadrant-spirit" />
             <span className="w-2 h-2 rounded-full bg-quadrant-vocation" />
           </div>
-          <span className="text-sm font-medium text-brand-text-muted">HUMAN 3.0 — Relatorio</span>
+          <span className="text-sm font-medium text-brand-text-muted">{t.header}</span>
         </div>
         <button
           onClick={onRestart}
           className="px-4 py-1.5 bg-brand-surface-alt text-brand-text-muted rounded-lg hover:bg-brand-surface-alt/80 transition-colors text-sm"
         >
-          Nova Avaliacao
+          {t.newAssessment}
         </button>
       </div>
 

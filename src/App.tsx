@@ -15,6 +15,7 @@ function InterviewScreen({ password }: { password: string }) {
     sendMessage,
     startInterview,
     requestReport,
+    lang,
   } = useChat(password);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ function InterviewScreen({ password }: { password: string }) {
     return (
       <Report
         content={report}
+        lang={lang}
         onRestart={() => window.location.reload()}
       />
     );
@@ -45,10 +47,14 @@ function InterviewScreen({ password }: { password: string }) {
             </div>
           </div>
           <p className="text-brand-text-muted text-sm">
-            Gerando seu relatorio HUMAN 3.0...
+            {lang === 'pt'
+              ? 'Gerando seu relatorio HUMAN 3.0...'
+              : 'Generando tu reporte HUMAN 3.0...'}
           </p>
           <p className="text-brand-text-faint text-xs mt-2">
-            Isso pode levar alguns minutos (analise profunda com Opus)
+            {lang === 'pt'
+              ? 'Isso pode levar alguns minutos (analise profunda com Opus)'
+              : 'Esto puede tardar algunos minutos (analisis profundo con Opus)'}
           </p>
         </div>
       </div>
@@ -61,6 +67,7 @@ function InterviewScreen({ password }: { password: string }) {
       isLoading={isLoading}
       assessmentComplete={assessmentComplete}
       error={error}
+      lang={lang}
       onSendMessage={sendMessage}
       onRequestReport={requestReport}
     />

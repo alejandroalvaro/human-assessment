@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import type { Message } from '../types';
+import type { Language } from '../utils/language';
 import { TypingIndicator } from './TypingIndicator';
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
   isLoading: boolean;
   assessmentComplete: boolean;
   error: string | null;
+  lang: Language;
   onSendMessage: (text: string) => void;
   onRequestReport: () => void;
 }
@@ -16,6 +18,7 @@ export function Chat({
   isLoading,
   assessmentComplete,
   error,
+  lang,
   onSendMessage,
   onRequestReport,
 }: Props) {
@@ -55,6 +58,13 @@ export function Chat({
     e.target.style.height = Math.min(e.target.scrollHeight, 150) + 'px';
   };
 
+  const t = {
+    header: lang === 'pt' ? 'HUMAN 3.0 — Avaliacao' : 'HUMAN 3.0 — Evaluacion',
+    placeholder: lang === 'pt' ? 'Digite sua resposta...' : 'Escribe tu respuesta...',
+    send: lang === 'pt' ? 'Enviar' : 'Enviar',
+    generateReport: lang === 'pt' ? 'Gerar Relatorio HUMAN 3.0' : 'Generar Reporte HUMAN 3.0',
+  };
+
   return (
     <div className="flex flex-col h-screen bg-brand-bg">
       {/* Header */}
@@ -66,7 +76,7 @@ export function Chat({
           <span className="w-2 h-2 rounded-full bg-quadrant-vocation" />
         </div>
         <h1 className="text-sm font-medium text-brand-text-muted">
-          HUMAN 3.0 — Avaliacao
+          {t.header}
         </h1>
       </div>
 
@@ -115,7 +125,7 @@ export function Chat({
             onClick={onRequestReport}
             className="w-full py-3 bg-accent-coral text-white rounded-lg font-medium hover:bg-accent-coral/90 transition-colors"
           >
-            Gerar Relatorio HUMAN 3.0
+            {t.generateReport}
           </button>
         ) : (
           <div className="flex gap-2 items-end">
@@ -124,7 +134,7 @@ export function Chat({
               value={input}
               onChange={handleTextareaChange}
               onKeyDown={handleKeyDown}
-              placeholder="Digite sua resposta..."
+              placeholder={t.placeholder}
               disabled={isLoading}
               rows={1}
               className="flex-1 px-3 py-2 bg-brand-bg border border-white/10 rounded-lg text-brand-text placeholder-brand-text-faint focus:outline-none focus:border-white/20 resize-none disabled:opacity-50 text-sm"
@@ -134,7 +144,7 @@ export function Chat({
               disabled={!input.trim() || isLoading}
               className="px-4 py-2 bg-accent-coral text-white rounded-lg font-medium hover:bg-accent-coral/90 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-sm"
             >
-              Enviar
+              {t.send}
             </button>
           </div>
         )}
